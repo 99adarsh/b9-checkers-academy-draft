@@ -5,6 +5,7 @@ networks:
   net-alice:
   net-bob:
   net-public:
+  net-db:
 
 services:
 
@@ -17,17 +18,34 @@ services:
     volumes:
       - ./kms-alice:/root/tmkms
 
+  postgres-db:
+    build:
+      context: .
+      dockerfile: Dockerfile-psql
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - net-db
+    ports:
+      - 0.0.0.0:5432:5432
+    volumes:
+      - ./postgres-db:/var/lib/postgresql/14/main/
+
   val-alice:
-    command: start
     container_name: val-alice
     depends_on:
       - kms-alice
+      - postgres-db
     image: checkersd_i
     networks:
       - net-alice-kms
       - net-alice
+      - net-db
     volumes:
       - ./val-alice:/root/.checkers
+    command: sh -c "connect-db-and-start.sh"
 
   sentry-alice:
     command: start
@@ -68,3 +86,4 @@ services:
       - 0.0.0.0:26657:26657
     volumes:
       - ./node-carol:/root/.checkers
+

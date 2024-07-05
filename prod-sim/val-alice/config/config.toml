@@ -403,7 +403,12 @@ peer_query_maj23_sleep_duration = "2s"
 #   1) "null"
 #   2) "kv" (default) - the simplest possible indexer, backed by key-value storage (defaults to levelDB; see DBBackend).
 # 		- When "kv" is chosen "tx.height" and "tx.hash" will always be indexed.
-indexer = "kv"
+#   3) "psql" - Indexed data will be stored in the the Postgres. The schema needs to be created before hand.
+indexer = "psql"
+
+# The PostgreSQL connection configuration, the connection format:
+#  postgresql://<user>:<password>@<host>:<port>/<db>?<opts>
+psql-conn = "postgresql://postgres:<your-password>@127.0.0.1:5432/cosmoshub"
 
 #######################################################
 ###       Instrumentation Configuration Options     ###

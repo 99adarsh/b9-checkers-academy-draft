@@ -1,0 +1,5 @@
+From postgres:latest
+
+EXPOSE 5432
+
+CMD ["postgres","-c","listen_addresses=*"]
